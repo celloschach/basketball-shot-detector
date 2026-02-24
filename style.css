@@ -1,0 +1,278 @@
+/* ─── Reset & Variables ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0c;
+  --surface:   #111115;
+  --border:    #222228;
+  --accent:    #00ff88;
+  --accent2:   #00cc6a;
+  --danger:    #ff3b5c;
+  --text:      #e8e8f0;
+  --muted:     #666680;
+  --font-ui:   'DM Mono', 'Fira Mono', 'Courier New', monospace;
+  --radius:    6px;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+/* ─── App Layout ────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ─── Topbar ────────────────────────────────────────────────── */
+#topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+#logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(0,255,136,0.4);
+}
+
+#status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+#status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#status-dot.active  { background: var(--accent);  box-shadow: 0 0 8px var(--accent); }
+#status-dot.found   { background: var(--accent);  box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent); }
+#status-dot.error   { background: var(--danger);  box-shadow: 0 0 8px var(--danger); }
+
+/* ─── Viewport ──────────────────────────────────────────────── */
+#viewport-wrapper {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#camera {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ─── HUD ───────────────────────────────────────────────────── */
+#hud {
+  position: absolute;
+  top: 10px; left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-item {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: var(--radius);
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  backdrop-filter: blur(4px);
+  min-width: 90px;
+}
+
+/* ─── No-Camera Screen ──────────────────────────────────────── */
+#no-camera {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.85);
+  text-align: center;
+  padding: 32px;
+}
+#no-camera .nc-icon { font-size: 48px; }
+#no-camera p { color: var(--text); line-height: 1.5; }
+#no-camera .nc-hint { color: var(--muted); font-size: 12px; }
+
+#retry-btn {
+  margin-top: 8px;
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s;
+}
+#retry-btn:active { opacity: 0.7; }
+
+/* ─── Controls Panel ────────────────────────────────────────── */
+#controls {
+  flex-shrink: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 16px 14px;
+  overflow-y: auto;
+  max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ctrl-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ctrl-row label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ctrl-row .val {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0,255,136,0.5);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+}
+
+select {
+  background: #0d0d10;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  width: 100%;
+  outline: none;
+}
+select:focus { border-color: var(--accent); }
+
+.toggle-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.toggle-row label {
+  text-transform: uppercase;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 36px; height: 20px;
+  background: var(--border);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  background: var(--muted);
+  border-radius: 50%;
+  transition: left 0.2s, background 0.2s;
+}
+input[type="checkbox"]:checked { background: rgba(0,255,136,0.25); }
+input[type="checkbox"]:checked::after { left: 19px; background: var(--accent); }
+
+/* ─── Utilities ─────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ─── Desktop fallback ──────────────────────────────────────── */
+@media (min-width: 640px) {
+  #app { max-width: 480px; margin: 0 auto; }
+  html, body { overflow: auto; }
+}
+
+/* ─── Safe area (Notch-Handys) ──────────────────────────────── */
+#topbar   { padding-top: max(10px, env(safe-area-inset-top)); }
+#controls { padding-bottom: max(14px, env(safe-area-inset-bottom)); }
