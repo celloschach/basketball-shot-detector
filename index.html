@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Kreis Erkennung</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="app">
+
+    <header id="topbar">
+      <span id="logo">⬤ CIRCLENS</span>
+      <div id="status-badge">
+        <span id="status-dot"></span>
+        <span id="status-text">Initialisierung…</span>
+      </div>
+    </header>
+
+    <div id="viewport-wrapper">
+      <video id="camera" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+
+      <div id="hud">
+        <div class="hud-item" id="hud-fps">— FPS</div>
+        <div class="hud-item" id="hud-radius">R: —</div>
+        <div class="hud-item" id="hud-conf">Konfidenz: —</div>
+      </div>
+
+      <div id="no-camera" class="hidden">
+        <div class="nc-icon">📷</div>
+        <p>Kamera konnte nicht gestartet werden.</p>
+        <p class="nc-hint">Bitte erlaube den Kamerazugriff und lade die Seite neu.</p>
+        <button id="retry-btn">Erneut versuchen</button>
+      </div>
+    </div>
+
+    <div id="controls">
+
+      <div class="ctrl-row">
+        <label>Min. Radius <span class="val" id="val-rmin">20</span>px</label>
+        <input type="range" id="rmin" min="5" max="200" value="20" />
+      </div>
+
+      <div class="ctrl-row">
+        <label>Max. Radius <span class="val" id="val-rmax">180</span>px</label>
+        <input type="range" id="rmax" min="20" max="400" value="180" />
+      </div>
+
+      <div class="ctrl-row">
+        <label>Kantenschwellwert <span class="val" id="val-edge">45</span></label>
+        <input type="range" id="edge-thresh" min="10" max="150" value="45" />
+      </div>
+
+      <div class="ctrl-row">
+        <label>Akkumulator Schwellwert <span class="val" id="val-acc">55</span>%</label>
+        <input type="range" id="acc-thresh" min="20" max="95" value="55" />
+      </div>
+
+      <div class="ctrl-row">
+        <label>Auflösung (Performance)</label>
+        <select id="res-select">
+          <option value="160">Sehr schnell (160px)</option>
+          <option value="240">Schnell (240px)</option>
+          <option value="320" selected>Balanciert (320px)</option>
+          <option value="480">Genau (480px)</option>
+        </select>
+      </div>
+
+      <div class="ctrl-row toggle-row">
+        <label>Debug-Kanten anzeigen</label>
+        <input type="checkbox" id="show-edges" />
+      </div>
+
+      <div class="ctrl-row toggle-row">
+        <label>Hintergrundmarkierung</label>
+        <input type="checkbox" id="show-mask" />
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
